@@ -1,7 +1,8 @@
 ﻿//InputHandler.cs
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 //Invoke handler and client
 public class InputHandler : MonoBehaviour
 {
@@ -9,10 +10,16 @@ public class InputHandler : MonoBehaviour
     // SerializeField let's us assign a value in the Unity editor for private variables.
     [SerializeField]
     // The character currently being commanded
-    private GridMovement currentActor;
+    private MonoBehaviour currentActor;
+
+    [SerializeField]
+    //private SnakeObject currentSnake;
+
 
     // A list of all characters in the scene
     private List<GridMovement> allActors;
+
+    private List<SnakeObject> allSnakes;
 
     // Variables for binding commands to input and executing commands
     public List<Command> Keymap = new List<Command>();  // keycode to command mapping
@@ -24,6 +31,8 @@ public class InputHandler : MonoBehaviour
     void Awake()
     {
         allActors = FindObjectsOfType<GridMovement>().ToList();
+
+        allSnakes = FindObjectsOfType<SnakeObject>().ToList();
 
 
 
@@ -37,6 +46,7 @@ public class InputHandler : MonoBehaviour
         MoveCommand moveRightCommand = new MoveCommand(KeyCode.D, "This moves right", Vector3.right);
         SwitchCommand switchCommand = new SwitchCommand(KeyCode.Tab, "This switches characters", currentCamera, this);
 
+
         Keymap.Add(moveUpCommand);
         Keymap.Add(moveDownCommand);
         Keymap.Add(moveLeftCommand);
@@ -44,33 +54,50 @@ public class InputHandler : MonoBehaviour
         Keymap.Add(switchCommand);
     }
 
-    public GridMovement NextActor() {
-        int index = allActors.IndexOf(currentActor);
-        //Debug.Log("[0]" + allActors[0]);
+    public MonoBehaviour NextActor() {
+        int index;
 
-        //Debug.Log("[1]:" + allActors[1]);
-
-        Debug.Log("CurrentActor:" + currentActor);
-        Debug.Log(index);
-
-
-        if ((index+1) == allActors.Count)
+        if (currentActor is GridMovement)
         {
-            currentActor = allActors[0];
-            Debug.Log("New currentactor: " + currentActor);
+            index = allActors.IndexOf(currentActor as GridMovement);
+            if ((index + 1) == allActors.Count)
+            {
+                currentActor = allActors[0];
+                Debug.Log("New currentactor: " + currentActor);
 
-            return currentActor;
+                return currentActor;
+            }
+            else
+            {
+                currentActor = allActors[index + 1];
+                Debug.Log("New currentactor: " + currentActor);
+                Debug.Log(index + 1);
+                return currentActor;
+            }
+        }
+        if (currentActor is SnakeObject)
+        {
+            index = allSnakes.IndexOf(currentActor as SnakeObject);
+            if ((index + 1) == allSnakes.Count)
+            {
+                currentActor = allSnakes[0];
+                Debug.Log("New currentactor: " + currentActor);
 
+                return currentActor;
+
+            }
+            else
+            {
+                currentActor = allSnakes[index + 1];// What is up with index++ breaking every??? ANSWERED
+                Debug.Log("New currentactor: " + currentActor);
+                Debug.Log(index + 1);
+                return currentActor;
+            }
         }
-        else {
-            currentActor = allActors[index+1];// What is up with index++ breaking every??? ANSWERED
-            Debug.Log("New currentactor: "+currentActor);
-            Debug.Log(index+1);
-            return currentActor;
-        }
-    
-    
+        else
+            return null;
     }
+
 
 
     void Update()

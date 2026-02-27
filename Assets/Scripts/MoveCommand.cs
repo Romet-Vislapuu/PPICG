@@ -12,10 +12,24 @@ public class MoveCommand : Command
     // dont change signature so dont pass direction using execute, make direction a field of MoveCommand class
     public override void Execute(MonoBehaviour receiver)
     {
-        if (receiver is not GridMovement) return;
-        (receiver as GridMovement).Walk(direction); // What is "as"? NVM, got it.
-
+        if (receiver is GridMovement)
+        {
+            (receiver as GridMovement).Walk(direction);
+            return;
+        }
+        if (receiver is SnakeObject)
+        {
+            (receiver as SnakeObject).SnakeWalk4(direction);
+            return;
+        }
+        return;
     }
+
+    public override void Undo()
+    {
+        throw new System.NotImplementedException();
+    }
+
     //Constructor for the class
     public MoveCommand(KeyCode key, string description, Vector3 direction)
     {

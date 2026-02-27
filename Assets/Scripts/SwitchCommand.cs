@@ -12,12 +12,18 @@ public class SwitchCommand : Command
 
     public override void Execute(MonoBehaviour receiver)
     {
-        if(Camera!=null && InputHandler != null)
+        if(Camera!=null && InputHandler != null )
         {
             Camera.SetTarget(InputHandler.NextActor().transform);
         }
     
     }
+
+    public override void Undo()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public SwitchCommand(KeyCode Key, string Description, CameraMovement Camera, InputHandler inputHandler) { 
         this.Key = Key;
         this.Description = Description;

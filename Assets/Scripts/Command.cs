@@ -24,6 +24,7 @@ public abstract class Command
     // Option 1: Gridmomvement is reciever: Execute(Gridmovement receiver). But this wouldnt work with other reciever.
     // Option 2: MonoBehaviour or gameobject.
     public abstract void Execute(MonoBehaviour receiver);
+    public abstract void Undo();
 
 
 
