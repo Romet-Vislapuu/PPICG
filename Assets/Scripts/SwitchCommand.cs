@@ -14,7 +14,19 @@ public class SwitchCommand : Command
     {
         if(Camera!=null && InputHandler != null )
         {
-            Camera.SetTarget(InputHandler.NextActor().transform);
+            MonoBehaviour a = InputHandler.NextActor();
+            if (a is GridMovement)
+            {
+                Camera.SetTarget(a.transform);
+                return;
+            }
+            // Following the Snakeobject itself breaks the camera. It stops following the snake. Have to do this ugly workaround.
+            else if(a is SnakeObject) { 
+                Camera.SetTarget((a as SnakeObject).getHead().transform);
+            }
+
+                ;
+            //Camera.JumpToTarget();
         }
     
     }

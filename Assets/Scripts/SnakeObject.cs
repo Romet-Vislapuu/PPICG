@@ -8,11 +8,13 @@ public class SnakeObject : MonoBehaviour
 {
     private GridMovement snakeHead;
     private GridMovement[] snakeArray;
-    private List<int[]> movePerPart = new List<int[]>();//(currentmove, repetitions) for each snake. Okay tuples suck, dont use
-    private List<Vector3> moveHistory = new List<Vector3>();
+//(currentmove, repetitions) for each snake. Okay tuples suck, dont use
     private List<List<Vector3>> moveHistories = new List<List<Vector3>>();
     private List<int> pointers = new List<int>();
-    private bool hasturned = false;
+
+    public MonoBehaviour getHead() {
+        return snakeHead;
+    }
 
     //private int headPointer = 0;
 
@@ -25,8 +27,7 @@ public class SnakeObject : MonoBehaviour
         Debug.Log("Head: "+snakeHead);
         for (int i = 0; i < snakeArray.Length; i++)
         {
-            //0,i
-            movePerPart.Add(new int[] { 0, i });//move zero and moves left depening on index; Switch from append to add
+
             moveHistories.Add(new List<Vector3>());
             pointers.Add(0);
 

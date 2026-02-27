@@ -88,9 +88,9 @@ public class InputHandler : MonoBehaviour
             }
             else
             {
-                currentActor = allSnakes[index + 1];// What is up with index++ breaking every??? ANSWERED
+                currentActor = allSnakes[index + 1];
                 Debug.Log("New currentactor: " + currentActor);
-                Debug.Log(index + 1);
+                //Debug.Log(index + 1);
                 return currentActor;
             }
         }
