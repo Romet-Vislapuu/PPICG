@@ -8,14 +8,30 @@ public class MoveCommand : Command
 
     public override string Description { get; }
     private Vector3 direction;
+    private MonoBehaviour receiver;//character who moved
 
     // dont change signature so dont pass direction using execute, make direction a field of MoveCommand class
-    public override void Execute(MonoBehaviour receiver)
+    public override bool Execute(MonoBehaviour receiver)
     {
-        if (receiver is not GridMovement) return;
-        (receiver as GridMovement).Walk(direction); // What is "as"? NVM, got it.
+        this.receiver = receiver;
+        if (receiver is not GridMovement) return false;
+        if((receiver as GridMovement).Walk(direction))
+            return true;
+        return false;
+    }
+
+    public override bool Undo()
+    {
+        Debug.Log("Undo triggered");
+        Debug.Log("Original direction" + direction);
+        Debug.Log("New Direction"+-direction);
+        if (receiver is not GridMovement) return false;
+        if((receiver as GridMovement).Walk(-direction))
+            return true;
+        return false;
 
     }
+
     //Constructor for the class
     public MoveCommand(KeyCode key, string description, Vector3 direction)
     {
