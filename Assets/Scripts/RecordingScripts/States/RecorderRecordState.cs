@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RecorderRecordState : RecorderState
 {
-    private float TimePassed = 0;
+    private float lastCommandTime = 0;// not deltatime. unitys internal clock that runs the entire time, because I can only update each time add is called, not each frame.
     private Command wrappedCommand = null;
 
 
@@ -29,10 +29,11 @@ public class RecorderRecordState : RecorderState
     {
         if (command is not RecorderInputCommand)
         {
-            this.TimePassed += Time.deltaTime;
-            wrappedCommand = new TimeDecorator(command, TimePassed);
-            this.inputRecorder.NewMacro.Add(command);
-            TimePassed = 0;
+            float delta = Time.time - lastCommandTime;
+            lastCommandTime = Time.time;
+            wrappedCommand = new TimeDecorator(command, delta);
+            this.inputRecorder.NewMacro.Add(wrappedCommand);
+            lastCommandTime = Time.time;
 
             return this;
         }
@@ -41,6 +42,11 @@ public class RecorderRecordState : RecorderState
         }
 
 
+    }
+    public override void Enter(InputRecorder inputRecorder)
+    {
+        lastCommandTime = Time.time;
+        base.Enter(inputRecorder);
     }
 
 

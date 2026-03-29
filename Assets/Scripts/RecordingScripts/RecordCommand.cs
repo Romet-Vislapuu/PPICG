@@ -12,7 +12,7 @@ public class RecordCommand : RecorderInputCommand
 
     public override void Execute(MonoBehaviour receiver)
     {
-        Handler.RecordMacro();
+        return;//now handled by states
     }
     public RecordCommand(KeyCode key, string Description, InputHandler handler) { 
         this.Key = key;

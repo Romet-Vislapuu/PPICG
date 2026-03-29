@@ -10,8 +10,7 @@ public class PlayCommand : RecorderInputCommand
     public InputHandler Handler;
     public override void Execute(MonoBehaviour receiver)
     {
-        if(Handler != null)
-            Handler.PlayMacro();
+        return; // now handled by states
     }
 
     public PlayCommand(KeyCode key, string description, InputHandler handler)
