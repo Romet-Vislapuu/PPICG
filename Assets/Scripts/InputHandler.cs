@@ -9,7 +9,7 @@ public class InputHandler : MonoBehaviour
 
     [SerializeField]
     // The character currently being commanded
-    private GridMovement currentActor;
+    public GridMovement currentActor;
 
     // A list of all characters in the scene
     private List<GridMovement> allActors;
@@ -24,6 +24,7 @@ public class InputHandler : MonoBehaviour
     private bool Recording = false;
     private float TimePassed = 0;
     private bool MacroActive = false;
+    public InputRecorder inputRecorder;
 
 
 
@@ -34,6 +35,8 @@ public class InputHandler : MonoBehaviour
     void Awake()
     {
         allActors = FindObjectsOfType<GridMovement>().ToList();
+        inputRecorder = FindObjectOfType<InputRecorder>();
+        inputRecorder.InputHandler = this;
 
 
 
