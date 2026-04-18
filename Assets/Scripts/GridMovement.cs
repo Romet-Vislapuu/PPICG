@@ -1,18 +1,17 @@
-﻿//GridMovement.cs
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//this is reciever
 public class GridMovement : MonoBehaviour
 {
     [SerializeField] private float moveTime = 0.3f;
     [SerializeField] private AnimationCurve spacing;
     
+    //The script will not accept new move orders before previous is finished.
     private bool isMoving;
     private Animator animator;
     private MapInfo map;
-
+    
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -20,29 +19,10 @@ public class GridMovement : MonoBehaviour
         map = FindObjectOfType<MapInfo>();
     }
 
-    private void Update()
-        
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.W)) 
-        {
-            Walk(Vector3.up);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            Walk(Vector3.down);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            Walk(Vector3.left);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Walk(Vector3.right);
-        }
-        */
-    }
-    // This is action
+    /// <summary>
+    /// Walks to adjacent tile based on direction
+    /// </summary>
+    /// <param name="direction"></param>
     public bool Walk(Vector3 direction)
     {
         if (isMoving) 
@@ -51,8 +31,9 @@ public class GridMovement : MonoBehaviour
         if (!IsPositionWalkable(transform.position + direction))
             return false;
         
-        StartCoroutine(WalkCoroutine(direction, moveTime));
+        StartCoroutine(Walk(direction, moveTime));
         return true;
+
     }
 
     private bool IsPositionWalkable(Vector3 pos)
@@ -68,7 +49,7 @@ public class GridMovement : MonoBehaviour
         return true;
     }
 
-    private IEnumerator WalkCoroutine(Vector3 direction, float duration)
+    private IEnumerator Walk(Vector3 direction, float duration)
     {
         Vector3 from = transform.position;
         Vector3 to = from + direction;
@@ -83,11 +64,11 @@ public class GridMovement : MonoBehaviour
         }
 
         isMoving = true;
-        float aggregate = 0;
-        while (aggregate < 1f)
+        float agregate = 0;
+        while (agregate < 1f)
         {
-            aggregate += Time.deltaTime / duration;
-            transform.position = Vector3.Lerp(from, to, spacing.Evaluate(aggregate));
+            agregate += Time.deltaTime / duration;
+            transform.position = Vector3.Lerp(from, to, spacing.Evaluate(agregate));
             yield return null;
         }
         isMoving = false;

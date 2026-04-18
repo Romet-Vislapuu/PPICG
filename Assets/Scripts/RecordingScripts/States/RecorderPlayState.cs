@@ -39,7 +39,7 @@ public class RecorderPlayState: RecorderState
 
             //yield return new WaitForSecondsRealtime(5);
 
-            com.Execute(this.inputRecorder.InputHandler.currentActor);
+            //com.Execute(this.inputRecorder.InputHandler.currentActor); REMOVE FOR OBSERVER TASK
 
 
         }

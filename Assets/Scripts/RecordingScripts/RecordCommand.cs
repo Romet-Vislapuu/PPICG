@@ -10,9 +10,9 @@ public class RecordCommand : RecorderInputCommand
 
     public InputHandler Handler;
 
-    public override void Execute(MonoBehaviour receiver)
+    public override bool Execute(GridMovement receiver)
     {
-        return;//now handled by states
+        return true;//now handled by states
     }
     public RecordCommand(KeyCode key, string Description, InputHandler handler) { 
         this.Key = key;

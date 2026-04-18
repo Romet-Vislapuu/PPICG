@@ -1,27 +1,34 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SwitchCommand : Command
 {
-    public override KeyCode Key { get; set; }
+    private KeyCode key;
+    private CameraMovement cameraMovement;
+    private InputHandler inputHandler;
 
-    public override string Description { get; }
-    private CameraMovement Camera;
-    private InputHandler InputHandler;
-
-
-    public override void Execute(MonoBehaviour receiver)
+    public override KeyCode Key
     {
-        if(Camera!=null && InputHandler != null)
-        {
-            Camera.SetTarget(InputHandler.NextActor().transform);
-        }
-    
+        get { return key; }
+        set { key = value; }
     }
-    public SwitchCommand(KeyCode Key, string Description, CameraMovement Camera, InputHandler inputHandler) { 
-        this.Key = Key;
-        this.Description = Description;
-        this.Camera = Camera;
-        this.InputHandler = inputHandler;
+
+    public override string Description => "Switches the active character.";
+
+    public SwitchCommand(KeyCode key, CameraMovement cameraMovement, InputHandler inputHandler)
+    {
+        this.key = key;
+        this.cameraMovement = cameraMovement;
+        this.inputHandler = inputHandler;
+    }
+
+    public override bool Execute(GridMovement receiver)
+    {
+        //We can ignore the receiver in this context
+        inputHandler.SwitchCharacter();
+        cameraMovement.SetTarget(inputHandler.getCurrentActor().transform);
+
+        return true;
     }
 }

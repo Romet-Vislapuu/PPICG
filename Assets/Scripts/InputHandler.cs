@@ -1,102 +1,60 @@
-﻿//InputHandler.cs
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-//Invoke handler and client
+
 public class InputHandler : MonoBehaviour
 {
-
-    [SerializeField]
-    // The character currently being commanded
-    public GridMovement currentActor;
-
-    // A list of all characters in the scene
+    [SerializeField] private GridMovement currentActor;
     private List<GridMovement> allActors;
-
-    // Variables for binding commands to input and executing commands
-    public List<Command> Keymap = new List<Command>();  // keycode to command mapping
-
-    public List<Command> SavedMacro = new List<Command>();
-    public List <Command> NewMacro = new List<Command>();
-    //private Command wrappedCommand = null;// do i nee this now
-    public InputRecorder inputRecorder;
-
-
-
-
-    [SerializeField]
-    private CameraMovement currentCamera;
-
+    private Stack<Command> commandHistory = new Stack<Command>();
+    public List<Command> Keymap = new List<Command>();
+    
+    // Use this for initialization
     void Awake()
     {
         allActors = FindObjectsOfType<GridMovement>().ToList();
-        inputRecorder = FindObjectOfType<InputRecorder>();
-        inputRecorder.InputHandler = this;
-
-
-
-
-        currentCamera = Camera.main.GetComponentInParent<CameraMovement>();
-   
-        MoveCommand moveUpCommand = new MoveCommand(KeyCode.W, "This moves up", Vector3.up);
-        MoveCommand moveDownCommand = new MoveCommand(KeyCode.S, "This moves down", Vector3.down);
-        MoveCommand moveLeftCommand = new MoveCommand(KeyCode.A, "This moves left", Vector3.left);
-        MoveCommand moveRightCommand = new MoveCommand(KeyCode.D, "This moves right", Vector3.right);
-        SwitchCommand switchCommand = new SwitchCommand(KeyCode.Tab, "This switches characters", currentCamera, this);
-        RecordCommand recordCommand = new RecordCommand(KeyCode.Q, "This records the macro",this);
-        PlayCommand playCommand = new PlayCommand(KeyCode.E, "This plays the command", this);
-
-
-
-        Keymap.Add(moveUpCommand);
-        Keymap.Add(moveDownCommand);
-        Keymap.Add(moveLeftCommand);
-        Keymap.Add(moveRightCommand);
-        Keymap.Add(switchCommand);
-        Keymap.Add(recordCommand);
-        Keymap.Add(playCommand);
+        
+        Keymap.Add(new MoveCommand(KeyCode.W, Vector3.up));
+        Keymap.Add(new MoveCommand(KeyCode.S, Vector3.down));
+        Keymap.Add(new MoveCommand(KeyCode.A, Vector3.left));
+        Keymap.Add(new MoveCommand(KeyCode.D, Vector3.right));
+        
+        //Initialize and add the SwitchCharacterCommand
+        CameraMovement cameraMovement = Camera.main.GetComponentInParent<CameraMovement>();
+        Keymap.Add(new SwitchCommand(KeyCode.Tab, cameraMovement, this));
     }
 
-    public GridMovement NextActor() {
-        int index = allActors.IndexOf(currentActor);
-
-
-        Debug.Log("CurrentActor:" + currentActor);
-        Debug.Log(index);
-
-
-        if ((index+1) == allActors.Count)
-        {
-            currentActor = allActors[0];
-            Debug.Log("New currentactor: " + currentActor);
-
-            return currentActor;
-
-        }
-        else {
-            currentActor = allActors[index+1];
-            Debug.Log("New currentactor: "+currentActor);
-            Debug.Log(index+1);
-            return currentActor;
-        }
-    
-    
-    }
-
-
+    // Update is called once per frame
     void Update()
     {
-            foreach (Command command in Keymap)
+        foreach (var command in Keymap)
+        {
+            if (Input.GetKeyDown(command.Key))
             {
-                if (Input.GetKeyDown(command.Key))
+                bool success = command.Execute(currentActor);
+                if (success)
                 {
-                    command.Execute(currentActor);
-                    inputRecorder.Add(command);
+                    commandHistory.Push(command);
                 }
             }
         }
     }
+    
+    public void SwitchCharacter(bool reverse = false)
+    {
+        if (allActors.Count > 1)
+        {
+            int currentIndex = allActors.IndexOf(currentActor);
+            currentIndex = (currentIndex + (reverse ? -1 : 1)) % allActors.Count;
+            if (currentIndex < 0) currentIndex = allActors.Count-1;
+            currentActor = allActors[currentIndex];
+        }
+    }
 
-
+    public GridMovement getCurrentActor() 
+    { 
+        return currentActor;
+    }
+}
 

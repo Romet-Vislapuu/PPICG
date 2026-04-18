@@ -37,7 +37,6 @@ public class CameraMovement : MonoBehaviour
 
     public void SetTarget(Transform newTarget)
     {
-        //Debug.Log("Tab pressed");
         target = newTarget;
     }
 

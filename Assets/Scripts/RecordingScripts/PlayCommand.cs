@@ -8,9 +8,9 @@ public class PlayCommand : RecorderInputCommand
     public override string Description { get; }
 
     public InputHandler Handler;
-    public override void Execute(MonoBehaviour receiver)
+    public override bool Execute(GridMovement receiver)
     {
-        return; // now handled by states
+        return false; // now handled by states
     }
 
     public PlayCommand(KeyCode key, string description, InputHandler handler)

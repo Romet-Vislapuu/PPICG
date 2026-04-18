@@ -1,26 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-// Implements the Command class
-// Is the ConcreteCommand class
 public class MoveCommand : Command
 {
-    public override KeyCode Key { get; set ; }
-
-    public override string Description { get; }
+    private KeyCode key;
     private Vector3 direction;
 
-    // dont change signature so dont pass direction using execute, make direction a field of MoveCommand class
-    public override void Execute(MonoBehaviour receiver)
+    public override KeyCode Key
     {
-        if (receiver is not GridMovement) return;
-        (receiver as GridMovement).Walk(direction); // What is "as"? NVM, got it.
-
+        get { return key; }
+        set { key = value; }
     }
-    //Constructor for the class
-    public MoveCommand(KeyCode key, string description, Vector3 direction)
+
+    public override string Description => "Moves the object in a specified direction.";
+
+    // Constructor to set the direction and key at creation time
+    public MoveCommand(KeyCode key, Vector3 direction)
     {
-        Key = key;
-        Description = description;
+        this.key = key;
         this.direction = direction;
+    }
+    
+    // Execute method calls the Walk method on the GridMovement component
+    public override bool Execute(GridMovement receiver)
+    {
+        return receiver.Walk(direction);
     }
 }

@@ -8,9 +8,10 @@ public abstract class CommandDecorator : Command
         wrappedCommand = command;
     }
 
-    public override void Execute(MonoBehaviour receiver)
+    public override bool Execute(GridMovement receiver)
     {
         wrappedCommand.Execute(receiver);
+        return false;
     
     }
 }
