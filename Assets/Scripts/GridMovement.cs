@@ -11,7 +11,12 @@ public class GridMovement : MonoBehaviour
     private bool isMoving;
     private Animator animator;
     private MapInfo map;
-    
+    public Subject OnWalk;
+    private void Awake()
+    {
+        OnWalk = new Subject(this);
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -32,6 +37,7 @@ public class GridMovement : MonoBehaviour
             return false;
         
         StartCoroutine(Walk(direction, moveTime));
+        OnWalk.Notify();
         return true;
 
     }

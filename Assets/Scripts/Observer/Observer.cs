@@ -2,4 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Observer  {}
+public interface Observer  {
+    void Update(object sender);
+
+
+
+
+}
