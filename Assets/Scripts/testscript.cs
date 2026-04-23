@@ -6,8 +6,10 @@ public class testscript : MonoBehaviour
     void Start()
     {
         //Debug.Log(Singleton1.instance);
-        Singleton1.GetInstance();
+        //Singleton1.GetInstance();
         //Debug.Log(Singleton1.instance);
+        //SingletonChild a = new SingletonChild();
+        this.gameObject.AddComponent<SingletonChild>();
 
 
 
