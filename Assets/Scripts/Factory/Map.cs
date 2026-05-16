@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /// <summary>
 /// Maze consists of rooms.
@@ -46,6 +47,7 @@ public abstract class MapSite
 /// </summary>
 public class Room : MapSite
 {
+    private bool toggle = false;
     public int nr;
     public List<MapTile> tiles = new List<MapTile>();
 
@@ -58,12 +60,30 @@ public class Room : MapSite
 
     public override void Load()
     {
-        Debug.Log("Loading room " + nr);
-        go = new GameObject("Room " + nr);
-        foreach (var tile in tiles)
+        UnityEngine.Debug.Log("Loading room " + nr);
+        float startTime = Time.realtimeSinceStartup;
+
+        if (toggle)
         {
-            tile.Load();
+;
         }
+        else {
+
+            go = new GameObject("Room " + nr);
+            foreach (var tile in tiles)
+            {
+                tile.Load();
+            }
+            UnityEngine.Debug.Log("Ms to load: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
+
+
+
+
+
+        }
+
+
+
     }
 
     public void AddTile(MapTile tile)
@@ -74,12 +94,19 @@ public class Room : MapSite
 
     public override void Unload()
     {
-        Debug.Log("Unloading room " + nr);
-        foreach (var tile in tiles)
+        UnityEngine.Debug.Log("Unloading room " + nr);
+        if (toggle)
         {
-            tile.Unload();
+
         }
-        Object.Destroy(go);
+        else {
+            foreach (var tile in tiles)
+            {
+                tile.Unload();
+            }
+            Object.Destroy(go);
+
+        }
     }
 
     public Transform GetTransform()
@@ -108,12 +135,14 @@ public abstract class MapTile : MapSite {
 
     public override void Enter(Actor actor)
     {
-        Debug.Log(string.Format("{0} entered tile {1}", actor.name, position));
+        UnityEngine.Debug.Log(string.Format("{0} entered tile {1}", actor.name, position));
     }
 
     public override void Load()
     {
+    
         go = Object.Instantiate<GameObject>(prefab, position * tileSize, Quaternion.identity);
+
         go.transform.parent = room.GetTransform();
         go.GetComponent<TileEvent>().tile = this;
     }
@@ -152,7 +181,7 @@ public class Portal : MapTile
 
     public override void Enter(Actor actor)
     {
-        Debug.Log(string.Format("{0} entered portal {1}", actor.name, position));
+        UnityEngine.Debug.Log(string.Format("{0} entered portal {1}", actor.name, position));
         if (room != exit.room)
         {
             room.Unload();
