@@ -6,6 +6,7 @@ public class ServiceSingleton: MonoBehaviour
     { get; private set; }
     public  AbstractMazeFactory MazeFactory { get; private set; }
     public bool ChooseFactory;
+    public Pools PoolService;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class ServiceSingleton: MonoBehaviour
             MazeFactory = this.gameObject.GetComponent<MazeFactory1>();
         else
             MazeFactory = this.gameObject.GetComponent<MazeFactory2>();
+        PoolService = this.gameObject.GetComponent<Pools>();
     }
     private void Start()
     {

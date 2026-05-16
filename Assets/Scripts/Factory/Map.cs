@@ -62,25 +62,18 @@ public class Room : MapSite
     {
         UnityEngine.Debug.Log("Loading room " + nr);
         float startTime = Time.realtimeSinceStartup;
-
-        if (toggle)
+        go = new GameObject("Room " + nr);
+        foreach (var tile in tiles)
         {
-;
+            tile.Load();
         }
-        else {
-
-            go = new GameObject("Room " + nr);
-            foreach (var tile in tiles)
-            {
-                tile.Load();
-            }
-            UnityEngine.Debug.Log("Ms to load: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
+        UnityEngine.Debug.Log("Ms to load: " + ((Time.realtimeSinceStartup - startTime) * 1000f));
 
 
 
 
 
-        }
+        
 
 
 

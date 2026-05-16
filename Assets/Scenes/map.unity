@@ -511,6 +511,7 @@ GameObject:
   - component: {fileID: 1934317761}
   - component: {fileID: 1934317760}
   - component: {fileID: 1934317762}
+  - component: {fileID: 1934317763}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -558,6 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChooseFactory: 1
+  PoolService: {fileID: 0}
 --- !u!114 &1934317761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +591,22 @@ MonoBehaviour:
   ground: {fileID: 169114, guid: 872adf242b6da2d4ab32e96fd77c0c3e, type: 3}
   riverRight: {fileID: 111310, guid: f635c7010e9c3324987f805d61e4e968, type: 3}
   riverForward: {fileID: 139174, guid: b42524874648bd8499954a7bf7146f8b, type: 3}
+  portal: {fileID: 151968, guid: 35d6c49f8a391c64f82917c3bdae86b2, type: 3}
+--- !u!114 &1934317763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934317757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b032da108d024428c547dadb2d8169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ground: {fileID: 169114, guid: 872adf242b6da2d4ab32e96fd77c0c3e, type: 3}
+  riverRight: {fileID: 105396, guid: bced6a5f641683640a69c9bdabd3181d, type: 3}
+  riverForward: {fileID: 129208, guid: eb5977126ca45dc408ee6730aafe8754, type: 3}
   portal: {fileID: 151968, guid: 35d6c49f8a391c64f82917c3bdae86b2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
