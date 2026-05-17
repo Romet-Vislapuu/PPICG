@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pools: MonoBehaviour
+public class Pools : MonoBehaviour
 {
     [SerializeField]
     private GameObject ground;
@@ -12,7 +12,7 @@ public class Pools: MonoBehaviour
     [SerializeField]
     private GameObject portal;
 
-    private Dictionary<GameObject,Pool> pools = new Dictionary<GameObject, Pool>();
+    public Dictionary<GameObject, Pool> pools = new Dictionary<GameObject, Pool>();
 
     private void Start()
     {
@@ -26,12 +26,22 @@ public class Pools: MonoBehaviour
     }
 
     public PooledObject GetPooledObject(GameObject prefab) {
-        return pools[gameObject].GetPooledObject();
+        return pools[prefab].GetPooledObject();
     }
     public void KillPooledObject(PooledObject po) {
         pools[po.prefab].KillPooledObject(po);
 
-    
+
+    }
+    public void PoolsDebugger()
+    {
+        foreach (Pool pool in pools.Values)
+        {
+            pool.PoolDebugger();
+
+
+
+        }
     }
 
 

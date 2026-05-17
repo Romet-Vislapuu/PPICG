@@ -117,6 +117,8 @@ public abstract class MapTile : MapSite {
     protected Vector3 position;
     protected GameObject prefab;
     private GameObject go;
+    private PooledObject po;
+    private bool toggle = false;
     protected const float tileSize = 3f; //hard coded ugliness
 
     public MapTile(Room room, GameObject pref, Vector3 pos)
@@ -133,16 +135,39 @@ public abstract class MapTile : MapSite {
 
     public override void Load()
     {
-    
-        go = Object.Instantiate<GameObject>(prefab, position * tileSize, Quaternion.identity);
+        // Not pool
+        if (toggle)
+        {
+            go = Object.Instantiate<GameObject>(prefab, position * tileSize, Quaternion.identity);
 
-        go.transform.parent = room.GetTransform();
-        go.GetComponent<TileEvent>().tile = this;
+            go.transform.parent = room.GetTransform();
+            go.GetComponent<TileEvent>().tile = this;
+        }
+        //Pool
+        else
+        {
+
+            po = ServiceSingleton.Instance.PoolService.GetPooledObject(prefab);
+            go = po.go;
+            go.transform.position = position * tileSize;
+            go.transform.rotation = Quaternion.identity;
+            go.transform.parent = room.GetTransform();
+            go.GetComponent<TileEvent>().tile = this;
+        }
+
     }
 
     public override void Unload()
     {
-        Object.Destroy(go);
+        //Not pool
+        if (toggle)
+            Object.Destroy(go);
+        //Pool
+        else
+            ServiceSingleton.Instance.PoolService.KillPooledObject(po);
+
+
+
     }
 }
 

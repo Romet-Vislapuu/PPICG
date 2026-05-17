@@ -8,13 +8,14 @@ public class Pool
     // Dead objects are at the end.
     private List<PooledObject> pool = new List<PooledObject>();
     int index;//for fast pool
-    GameObject prefab;
+    private GameObject prefab;
 
     public Pool(GameObject prefab, int count) {
         for(int i = 0; i < count; i++)
         {
             pool.Add(new PooledObject(prefab, i));
         }
+        this.prefab = prefab;
         index = 0;
     }//Pool()
 
@@ -23,8 +24,11 @@ public class Pool
         index++;
         if (index == pool.Count) {
             Debug.Log("Pool empty");
-            return null;
+            p.Revive();
+            PoolDebugger();
+            return p;
         }
+        p.Revive();
         return p;
     }
     public void KillPooledObject(PooledObject po)
@@ -33,6 +37,7 @@ public class Pool
         if (po.index == pool.Count-1)
         {
             // Inactive object at the end of the list where it should be.
+            index = po.index;
             return;
         }
         // Move right if possible.
@@ -43,9 +48,10 @@ public class Pool
                 Swap(pool[i - 1], pool[i]);
             }
             else
-                return;
+                break;
 
         }
+        index = po.index;
     }
     public void Swap(PooledObject a, PooledObject b) { 
         int aIndex = a.index;
