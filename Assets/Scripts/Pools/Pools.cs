@@ -14,7 +14,7 @@ public class Pools : MonoBehaviour
 
     public Dictionary<GameObject, Pool> pools = new Dictionary<GameObject, Pool>();
 
-    private void Start()
+    private void Awake()
     {
         pools.Add(ground, new Pool(ground, 20));
         pools.Add(riverRight, new Pool(riverRight, 20));

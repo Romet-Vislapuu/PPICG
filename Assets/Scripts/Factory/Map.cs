@@ -47,7 +47,7 @@ public abstract class MapSite
 /// </summary>
 public class Room : MapSite
 {
-    private bool toggle = false;
+    //private bool toggle = false;
     public int nr;
     public List<MapTile> tiles = new List<MapTile>();
 
@@ -88,18 +88,13 @@ public class Room : MapSite
     public override void Unload()
     {
         UnityEngine.Debug.Log("Unloading room " + nr);
-        if (toggle)
-        {
-
-        }
-        else {
             foreach (var tile in tiles)
             {
                 tile.Unload();
             }
             Object.Destroy(go);
 
-        }
+        
     }
 
     public Transform GetTransform()
@@ -146,6 +141,8 @@ public abstract class MapTile : MapSite {
         //Pool
         else
         {
+            //ServiceSingleton.Instance.PoolService.PoolsDebugger();
+
 
             po = ServiceSingleton.Instance.PoolService.GetPooledObject(prefab);
             go = po.go;
